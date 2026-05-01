@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servicios de Programación</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+/* HEADER */
+header {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 8%;
+  background: linear-gradient(135deg, #020617, #111827, #1e293b);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  max-width: 1100px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  color: #38bdf8;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #cbd5e1;
+}
+
+.hero img {
+  width: 100%;
+  border-radius: 15px;
+}
+
+/* SECCIONES */
+section {
+  padding: 60px 10%;
+}
+
+h2 {
+  color: #38bdf8;
+}
+
+/* SERVICIOS */
+.servicios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background: #334155;
+}
+
+/* FORMULARIO */
+form {
+  max-width: 500px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  background: #38bdf8;
+  color: white;
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* WHATSAPP */
+.whatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<header>
+<div class="hero">
+<div>
+<h1>Desarrollo Web & Programación</h1>
+<p>Creamos soluciones digitales modernas, funcionales y profesionales para negocios, estudiantes y emprendedores.</p>
+</div>
+
+<img src="https://images.unsplash.com/photo-1518770660439-4636190af475" alt="programador">
+</div>
+</header>
+
+<section>
+<h2>¿Qué hacemos?</h2>
+<p>Nos dedicamos a crear páginas web, sistemas CRUD, aplicaciones básicas y soluciones digitales conectadas a bases de datos como MongoDB.</p>
+</section>
+
+<section>
+<h2>Servicios</h2>
+
+<div class="servicios">
+
+<div class="card">
+<h3>Páginas Web</h3>
+<p>Diseño moderno, responsive y atractivo para cualquier negocio.</p>
+</div>
+
+<div class="card">
+<h3>CRUD con Base de Datos</h3>
+<p>Sistemas para crear, leer, actualizar y eliminar información.</p>
+</div>
+
+<div class="card">
+<h3>Formularios Inteligentes</h3>
+<p>Formularios conectados a bases de datos y correo electrónico.</p>
+</div>
+
+<div class="card">
+<h3>Aplicaciones Básicas</h3>
+<p>Apps funcionales para tareas, agendas y proyectos escolares.</p>
+</div>
+
+</div>
+</section>
+
+<section>
+<h2>Contáctame</h2>
+
+<form id="formulario">
+<input type="text" placeholder="Nombre" id="nombre" required>
+<input type="email" placeholder="Correo" id="correo" required>
+<input type="text" placeholder="Teléfono" id="telefono">
+
+<select id="servicio">
+<option>Página web</option>
+<option>CRUD</option>
+<option>Aplicación</option>
+</select>
+
+<textarea placeholder="Mensaje" id="mensaje"></textarea>
+
+<button type="submit">Enviar</button>
+</form>
+
+<p id="respuesta"></p>
+
+</section>
+
+<!-- WHATSAPP -->
+<a class="whatsapp"
+href="https://wa.me/5217751643784?text=Hola,%20quiero%20información%20sobre%20tus%20servicios"
+target="_blank">
+💬
+</a>
+
+<script>
+document.getElementById("formulario").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = {
+    nombre: nombre.value,
+    correo: correo.value,
+    telefono: telefono.value,
+    servicio: servicio.value,
+    mensaje: mensaje.value
+  };
+
+  try{
+    const res = await fetch("/contacto", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const json = await res.json();
+
+    if(json.ok){
+      document.getElementById("respuesta").innerText = "Mensaje enviado correctamente";
+    } else {
+      document.getElementById("respuesta").innerText = "Error al enviar";
+    }
+
+  }catch(error){
+    document.getElementById("respuesta").innerText = "Servidor no disponible";
+  }
+
+});
+</script>
+
+</body>
+</html>
