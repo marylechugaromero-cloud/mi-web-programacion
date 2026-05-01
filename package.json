@@ -1,0 +1,15 @@
+{
+  "name": "web-programacion",
+  "version": "1.0.0",
+  "description": "Pagina con formulario, MongoDB y correo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "nodemailer": "^6.9.0"
+  }
+}
