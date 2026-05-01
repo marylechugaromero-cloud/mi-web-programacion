@@ -8,12 +8,12 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(__dirname)); // 🔥 CORREGIDO
 
 // Conexión MongoDB
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("MongoDB conectado"))
-.catch(err => console.log(err));
+  .then(() => console.log("MongoDB conectado"))
+  .catch(err => console.log(err));
 
 // Configuración correo
 const transporter = nodemailer.createTransport({
