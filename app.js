@@ -19,7 +19,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // 🔥 CONEXIÓN CORRECTA A MONGO
 mongoose.connect(process.env.MONGO_URI, {
-  serverSelectionTimeoutMS: 5000
+  serverSelectionTimeoutMS: 10000,
+  socketTimeoutMS: 45000
 })
 .then(() => console.log("✅ MongoDB conectado correctamente"))
 .catch((error) => console.error("❌ Error MongoDB:", error));

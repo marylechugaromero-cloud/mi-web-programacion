@@ -8,7 +8,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(express.static(__dirname)); // 🔥 CORREGIDO
+app.use(express.static(__dirname)); 
 
 // Conexión MongoDB
 mongoose.connect(process.env.MONGO_URI)
