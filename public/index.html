@@ -370,6 +370,9 @@ target="_blank">
 document.getElementById("formulario").addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const respuesta = document.getElementById("respuesta");
+  respuesta.innerText = "Enviando...";
+
   const data = {
     nombre: document.getElementById("nombre").value,
     correo: document.getElementById("correo").value,
@@ -378,22 +381,28 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
     mensaje: document.getElementById("mensaje").value
   };
 
-  const res = await fetch("/contacto", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
+  try {
+    const res = await fetch("/contacto", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
 
-  const json = await res.json();
+    const json = await res.json();
 
-  document.getElementById("respuesta").innerText = json.ok
-    ? "Mensaje enviado correctamente"
-    : "Error al enviar";
+    respuesta.innerText = json.ok
+      ? "Mensaje enviado correctamente"
+      : "Error: " + json.mensaje;
 
-  if (json.ok) {
-    document.getElementById("formulario").reset();
+    if (json.ok) {
+      document.getElementById("formulario").reset();
+    }
+
+  } catch (error) {
+    console.error(error);
+    respuesta.innerText = "Error de conexión con el servidor";
   }
 });
 </script>
