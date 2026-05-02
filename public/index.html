@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7,65 +6,368 @@
 <title>Servicios de Programación</title>
 
 <style>
-/* TODO TU CSS ORIGINAL (NO CAMBIÉ NADA) */
-* { box-sizing: border-box; }
-body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #cd07d4; color: #ebe7e5; }
-header { min-height: 90vh; display: flex; align-items: center; justify-content: center; padding: 50px 8%; background: linear-gradient(135deg, #160217, #271125, #3b1e21); }
-.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; max-width: 1100px; }
-.hero h1 { font-size: 48px; color: #dc3cde; }
-.hero p { color: #e1cbdb; }
-section { padding: 60px 8%; }
-h2 { color: #d238f8; text-align: center; }
-.formulario { max-width: 700px; margin: auto; background: #341e3b; padding: 30px; border-radius: 20px; }
-input, textarea, select { width: 100%; padding: 14px; margin: 10px 0; border-radius: 10px; background: #5a1d67; color: white; }
-button { background: #f838ef; color: #170216; padding: 14px; border-radius: 10px; cursor: pointer; }
-#respuesta { margin-top: 15px; font-weight: bold; }
-</style>
+* {
+  box-sizing: border-box;
+}
 
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  background: #cd07d4;
+  color: #ebe7e5;
+}
+
+header {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 8%;
+  background: linear-gradient(135deg, #160217, #271125, #3b1e21);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  max-width: 1100px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  color: #dc3cde;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #e1cbdb;
+}
+
+.hero button {
+  margin-top: 20px;
+}
+
+.computer-box {
+  background: #4e0950;
+  border: 1px solid #523355;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 0 30px rgba(219, 56, 248, 0.2);
+}
+
+.screen {
+  background: #260f2a;
+  border-radius: 15px;
+  padding: 25px;
+  font-family: Consolas, monospace;
+  color: #22c55e;
+}
+
+.cursor {
+  color: white;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+section {
+  padding: 60px 8%;
+}
+
+h2 {
+  color: #d238f8;
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.subtitulo {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 40px;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: #3a1e3b;
+  padding: 25px;
+  border-radius: 18px;
+  border: 1px solid #553354;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: #eb38f8;
+  box-shadow: 0 0 20px rgba(245, 56, 248, 0.2);
+}
+
+.card h3 {
+  color: #f8fafc;
+}
+
+.card p {
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.icono {
+  font-size: 40px;
+}
+
+.info {
+  background: #45094f;
+}
+
+.tecnologias {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.tech {
+  background: #341e3b;
+  border: 1px solid #543355;
+  padding: 12px 20px;
+  border-radius: 30px;
+  color: #e0f2fe;
+}
+
+.formulario {
+  max-width: 700px;
+  margin: auto;
+  background: #341e3b;
+  padding: 30px;
+  border-radius: 20px;
+  border: 1px solid #523355;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #5a1d67;
+  color: white;
+  border: 1px solid #60226b;
+}
+
+textarea {
+  min-height: 120px;
+}
+
+button {
+  background: #f838ef;
+  color: #170216;
+  padding: 14px 25px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #d70ee9;
+}
+
+#respuesta {
+  margin-top: 15px;
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.whatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  padding: 18px;
+  border-radius: 50%;
+  font-size: 28px;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(37,211,102,0.5);
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  background: #38063e;
+  color: #94a3b8;
+}
+
+@media(max-width: 800px) {
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-<section id="contacto">
-  <h2>Contáctame</h2>
+<header>
+  <div class="hero">
+    <div>
+      <h1>Servicios de Programación y Desarrollo Web</h1>
+      <p>
+        Creamos soluciones digitales modernas para personas, negocios y proyectos escolares.
+        Desarrollamos páginas web, formularios, sistemas CRUD y aplicaciones conectadas a bases de datos.
+      </p>
+      <p>
+        Nuestro objetivo es transformar ideas en proyectos funcionales, creativos y fáciles de usar.
+      </p>
+      <a href="#contacto"><button>Solicitar información</button></a>
+    </div>
 
-  <div class="formulario">
-    <form id="formulario">
+    <div class="computer-box">
+      <div class="screen">
+        <p>&lt;html&gt;</p>
+        <p>&nbsp;&nbsp;&lt;h1&gt;Desarrollo Web&lt;/h1&gt;</p>
+        <p>&nbsp;&nbsp;&lt;database&gt;MongoDB&lt;/database&gt;</p>
+        <p>&nbsp;&nbsp;&lt;form&gt;Contacto&lt;/form&gt;</p>
+        <p>&lt;/html&gt;<span class="cursor">|</span></p>
+      </div>
+    </div>
+  </div>
+</header>
 
-```
-  <input type="text" placeholder="Nombre" id="nombre" required>
-  <input type="email" placeholder="Correo" id="correo" required>
+<section>
+  <h2>¿Qué hacemos?</h2>
+  <p class="subtitulo">
+    Desarrollamos proyectos digitales que ayudan a organizar información, automatizar tareas
+    y mejorar la comunicación entre usuarios y servicios.
+  </p>
 
-  <!-- 🔥 AHORA OBLIGATORIO -->
-  <input type="text" placeholder="Teléfono" id="telefono" required>
+  <div class="cards">
+    <div class="card">
+      <div class="icono">💻</div>
+      <h3>Páginas web</h3>
+      <p>Creamos sitios web informativos, modernos y adaptables para mostrar servicios, proyectos o negocios.</p>
+    </div>
 
-  <!-- 🔥 AHORA OBLIGATORIO -->
-  <select id="servicio" required>
-    <option value="">Selecciona un servicio</option>
-    <option value="Página web">Página web</option>
-    <option value="Sistema CRUD">Sistema CRUD</option>
-    <option value="Formulario con base de datos">Formulario con base de datos</option>
-    <option value="Aplicación básica">Aplicación básica</option>
-    <option value="Asesoría de programación">Asesoría de programación</option>
-  </select>
+    <div class="card">
+      <div class="icono">🗂️</div>
+      <h3>Sistemas CRUD</h3>
+      <p>Desarrollamos sistemas para crear, leer, actualizar y eliminar información de forma ordenada.</p>
+    </div>
 
-  <textarea placeholder="Escribe tu mensaje" id="mensaje" required></textarea>
+    <div class="card">
+      <div class="icono">📩</div>
+      <h3>Formularios inteligentes</h3>
+      <p>Diseñamos formularios que guardan datos en MongoDB y también envían mensajes al correo.</p>
+    </div>
 
-  <button type="submit">Enviar mensaje</button>
-
-</form>
-
-<p id="respuesta"></p>
-```
-
+    <div class="card">
+      <div class="icono">📱</div>
+      <h3>Contacto rápido</h3>
+      <p>Integramos botones de WhatsApp para que los usuarios puedan pedir información fácilmente.</p>
+    </div>
   </div>
 </section>
 
-<script>
-const form = document.getElementById("formulario");
-const respuesta = document.getElementById("respuesta");
+<section class="info">
+  <h2>¿Por qué lo hacemos?</h2>
+  <p class="subtitulo">
+    Porque la programación permite resolver problemas reales. Una página web o un sistema con base de datos
+    puede ayudar a un negocio, estudiante o institución a trabajar de manera más rápida, profesional y organizada.
+  </p>
 
-form.addEventListener("submit", async (e) => {
+  <div class="cards">
+    <div class="card">
+      <h3>Innovación</h3>
+      <p>Usamos tecnología para convertir una idea sencilla en una herramienta digital funcional.</p>
+    </div>
+
+    <div class="card">
+      <h3>Automatización</h3>
+      <p>Reducimos tareas manuales mediante formularios, bases de datos y sistemas administrativos.</p>
+    </div>
+
+    <div class="card">
+      <h3>Funcionalidad</h3>
+      <p>No solo buscamos que se vea bonito, también que funcione correctamente y sea útil.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Tecnologías que usamos</h2>
+  <p class="subtitulo">
+    Para este proyecto se utilizan herramientas reales del desarrollo web.
+  </p>
+
+  <div class="tecnologias">
+    <span class="tech">HTML</span>
+    <span class="tech">CSS</span>
+    <span class="tech">JavaScript</span>
+    <span class="tech">Node.js</span>
+    <span class="tech">MongoDB</span>
+    <span class="tech">WhatsApp</span>
+  </div>
+</section>
+
+<section id="contacto">
+  <h2>Contáctame</h2>
+  <p class="subtitulo">
+    Llena el formulario y tu mensaje será guardado y enviado al correo.
+  </p>
+
+  <div class="formulario">
+    <form id="formulario">
+      <input type="text" placeholder="Nombre" id="nombre" required>
+      <input type="email" placeholder="Correo electrónico" id="correo" required>
+      <input type="text" placeholder="Teléfono" id="telefono">
+
+      <select id="servicio">
+        <option>Página web</option>
+        <option>Sistema CRUD</option>
+        <option>Formulario con base de datos</option>
+        <option>Aplicación básica</option>
+        <option>Asesoría de programación</option>
+      </select>
+
+      <textarea placeholder="Escribe tu mensaje" id="mensaje" required></textarea>
+
+      <button type="submit">Enviar mensaje</button>
+    </form>
+
+    <p id="respuesta"></p>
+  </div>
+</section>
+
+<a class="whatsapp"
+href="https://wa.me/5217751643784?text=Hola,%20quiero%20información%20sobre%20tus%20servicios%20de%20programación"
+target="_blank">
+💬
+</a>
+
+<footer>
+  <p>Contactanos a "dulcemariahernandez23@cbtis179.edu.mx" y a "mariadelosangeleslechuga23@cbtis179.edu.mx"</p>
+</footer>
+
+<script>
+document.getElementById("formulario").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const data = {
@@ -76,36 +378,22 @@ form.addEventListener("submit", async (e) => {
     mensaje: document.getElementById("mensaje").value
   };
 
-  if (!data.nombre || !data.correo || !data.telefono || !data.servicio || !data.mensaje) {
-    respuesta.style.color = "red";
-    respuesta.innerText = "Llena todos los campos";
-    return;
-  }
+  const res = await fetch("/contacto", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
 
-  try {
-    respuesta.style.color = "yellow";
-    respuesta.innerText = "Enviando...";
+  const json = await res.json();
 
-    const res = await fetch("/contacto", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
+  document.getElementById("respuesta").innerText = json.ok
+    ? "Mensaje enviado correctamente"
+    : "Error al enviar";
 
-    const json = await res.json();
-
-    if (json.ok) {
-      respuesta.style.color = "lightgreen";
-      respuesta.innerText = "Mensaje enviado correctamente ✅";
-      form.reset();
-    } else {
-      respuesta.style.color = "red";
-      respuesta.innerText = json.mensaje || "Error al enviar";
-    }
-
-  } catch (err) {
-    respuesta.style.color = "red";
-    respuesta.innerText = "Error del servidor ❌";
+  if (json.ok) {
+    document.getElementById("formulario").reset();
   }
 });
 </script>

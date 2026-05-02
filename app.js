@@ -43,13 +43,12 @@ app.post("/contacto", async (req, res) => {
   try {
     const { nombre, correo, telefono, servicio, mensaje } = req.body;
 
-    if (!nombre || !correo || !telefono || !servicio || !mensaje) {
-      return res.status(400).json({
-        ok: false,
-        mensaje: "Todos los campos son obligatorios"
-      });
-    }
-
+   if (!nombre || !correo || !servicio || !mensaje) {
+  return res.status(400).json({
+    ok: false,
+    mensaje: "Nombre, correo, servicio y mensaje son obligatorios"
+  });
+}
     const nuevoContacto = new Contacto({
       nombre,
       correo,
@@ -80,11 +79,11 @@ app.post("/contacto", async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      mensaje: "Error al enviar mensaje"
-    });
+  console.error("❌ ERROR EN /contacto:", error.message);
+  res.status(500).json({
+    ok: false,
+    mensaje: "Error al enviar mensaje"
+  });
   }
 });
 
