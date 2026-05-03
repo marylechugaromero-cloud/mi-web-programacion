@@ -13,15 +13,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ESTA LÍNEA ES LA QUE ARREGLA EL "NOT FOUND"
-app.use(express.static(path.join(__dirname))); 
+// ESTA LÍNEA ES LA QUE ARREGLA EL "NOT FOUND" (Apunta a la carpeta public)
+app.use(express.static(path.join(__dirname, "public"))); 
 
-// Conexión a MongoDB (Viendo tus logs, esto ya funciona)
+// Conexión a MongoDB (Ya confirmada en tus logs)
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB conectado correctamente"))
   .catch((error) => console.error("❌ Error MongoDB:", error.message));
 
-// Configuración de Correo usando tus variables de Render
+// Configuración de Correo (Usando tus variables de Render)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -35,19 +35,19 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// RUTA PARA CARGAR TU PÁGINA (Arregla el "Not Found")
+// RUTA PARA CARGAR TU PÁGINA (Apunta correctamente a public/index.html)
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// RUTA PARA EL FORMULARIO (Arregla el "Timeout")
+// RUTA PARA EL FORMULARIO (Evita el Connection Timeout)
 app.post("/contacto", async (req, res) => {
   try {
     const { nombre, correo, telefono, servicio, mensaje } = req.body;
     const nuevo = new Contacto({ nombre, correo, telefono, servicio, mensaje });
     await nuevo.save();
 
-    // Enviamos el correo en segundo plano para que el servidor responda rápido
+    // Enviar correo sin 'await' para responder rápido
     transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
@@ -55,7 +55,7 @@ app.post("/contacto", async (req, res) => {
       text: `Nombre: ${nombre}\nCorreo: ${correo}\nTeléfono: ${telefono}\nServicio: ${servicio}\nMensaje: ${mensaje}`
     }).catch(err => console.log("Error correo:", err.message));
 
-    // Respondemos de inmediato para evitar el Connection Timeout
+    // Respondemos de inmediato para evitar el timeout
     res.json({ ok: true });
 
   } catch (error) {
@@ -66,5 +66,5 @@ app.post("/contacto", async (req, res) => {
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor en puerto ${PORT}`);
+  console.log(`🚀 Servidor activo en puerto ${PORT}`);
 });
