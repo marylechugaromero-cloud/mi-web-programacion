@@ -1,54 +1,44 @@
 require("dotenv").config();
-
 const express = require("express");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 const path = require("path");
-
 const Contacto = require("./models/Contacto");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(__dirname)); 
 
-mongoose.connect(process.env.MONGO_URI, {
-  serverSelectionTimeoutMS: 10000,
-  socketTimeoutMS: 45000
-})
-.then(() => console.log("✅ MongoDB conectado correctamente"))
-.catch((error) => console.error("❌ Error MongoDB:", error.message));
+// Conexión a MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB conectado correctamente"))
+  .catch((error) => console.error("❌ Error MongoDB:", error.message));
 
-// 📧 CONFIG CORREO CON SMTP
+// Configuración de Nodemailer
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: true,
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, 
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    rejectUnauthorized: false 
   }
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
+// Ruta del formulario
 app.post("/contacto", async (req, res) => {
   try {
     const { nombre, correo, telefono, servicio, mensaje } = req.body;
 
-    if (!nombre || !correo || !servicio || !mensaje) {
-      return res.status(400).json({
-        ok: false,
-        mensaje: "Nombre, correo, servicio y mensaje son obligatorios"
-      });
-    }
-
+    // Guardar en la base de datos
     const nuevoContacto = new Contacto({
       nombre,
       correo,
@@ -59,34 +49,23 @@ app.post("/contacto", async (req, res) => {
 
     await nuevoContacto.save();
 
-    await transporter.sendMail({
-      from: process.env.SMTP_USER,
-      to: process.env.SMTP_USER,
-      subject: "Nuevo mensaje desde la página web",
-      html: `
-        <h2>Nuevo mensaje</h2>
-        <p><b>Nombre:</b> ${nombre}</p>
-        <p><b>Correo:</b> ${correo}</p>
-        <p><b>Teléfono:</b> ${telefono || "No proporcionado"}</p>
-        <p><b>Servicio:</b> ${servicio}</p>
-        <p><b>Mensaje:</b> ${mensaje}</p>
-      `
-    });
+    // Enviar correo (sin 'await' para responder rápido al cliente)
+    transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: `Nuevo mensaje de ${nombre}`,
+      text: `Nombre: ${nombre}\nCorreo: ${correo}\nTeléfono: ${telefono}\nServicio: ${servicio}\nMensaje: ${mensaje}`
+    }).catch(err => console.log("Error envío correo:", err));
 
-    res.json({
-      ok: true,
-      mensaje: "Mensaje enviado y guardado correctamente"
-    });
+    res.json({ ok: true, mensaje: "¡Mensaje enviado!" });
 
   } catch (error) {
-    console.error("❌ ERROR EN /contacto:", error.message);
-    res.status(500).json({
-      ok: false,
-      mensaje: error.message
-    });
+    console.error("❌ Error:", error);
+    res.status(500).json({ ok: false, mensaje: "Error en el servidor" });
   }
 });
 
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-  console.log("Servidor corriendo en puerto " + PORT);
+  console.log(`🚀 Servidor en puerto ${PORT}`);
 });

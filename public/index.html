@@ -371,7 +371,8 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const respuesta = document.getElementById("respuesta");
-  respuesta.innerText = "Enviando...";
+  respuesta.style.color = "#ebe7e5";
+  respuesta.innerText = "⏳ Procesando... por favor espera.";
 
   const data = {
     nombre: document.getElementById("nombre").value,
@@ -384,25 +385,25 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
   try {
     const res = await fetch("/contacto", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
 
     const json = await res.json();
 
-    respuesta.innerText = json.ok
-      ? "Mensaje enviado correctamente"
-      : "Error: " + json.mensaje;
-
     if (json.ok) {
+      respuesta.style.color = "#22c55e"; // Verde éxito
+      respuesta.innerText = "✅ ¡Tu mensaje ha sido enviado y guardado!";
       document.getElementById("formulario").reset();
+    } else {
+      respuesta.style.color = "#ff4444";
+      respuesta.innerText = "❌ Error: " + json.mensaje;
     }
 
   } catch (error) {
     console.error(error);
-    respuesta.innerText = "Error de conexión con el servidor";
+    respuesta.style.color = "#ff4444";
+    respuesta.innerText = "⚠️ El servidor tardó en responder, pero es posible que tu mensaje se haya enviado. Revisa tu correo.";
   }
 });
 </script>
