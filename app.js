@@ -11,45 +11,44 @@ const Contacto = require("./models/Contacto");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// 🔥 CONEXIÓN CORRECTA A MONGO
 mongoose.connect(process.env.MONGO_URI, {
   serverSelectionTimeoutMS: 10000,
   socketTimeoutMS: 45000
 })
 .then(() => console.log("✅ MongoDB conectado correctamente"))
-.catch((error) => console.error("❌ Error MongoDB:", error));
+.catch((error) => console.error("❌ Error MongoDB:", error.message));
 
-// 📧 CONFIG CORREO
+// 📧 CONFIG CORREO CON SMTP
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
   }
 });
 
-// Ruta principal
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Ruta formulario
 app.post("/contacto", async (req, res) => {
   try {
     const { nombre, correo, telefono, servicio, mensaje } = req.body;
 
-   if (!nombre || !correo || !servicio || !mensaje) {
-  return res.status(400).json({
-    ok: false,
-    mensaje: "Nombre, correo, servicio y mensaje son obligatorios"
-  });
-}
+    if (!nombre || !correo || !servicio || !mensaje) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Nombre, correo, servicio y mensaje son obligatorios"
+      });
+    }
+
     const nuevoContacto = new Contacto({
       nombre,
       correo,
@@ -61,14 +60,14 @@ app.post("/contacto", async (req, res) => {
     await nuevoContacto.save();
 
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+      from: process.env.SMTP_USER,
+      to: process.env.SMTP_USER,
       subject: "Nuevo mensaje desde la página web",
       html: `
         <h2>Nuevo mensaje</h2>
         <p><b>Nombre:</b> ${nombre}</p>
         <p><b>Correo:</b> ${correo}</p>
-        <p><b>Teléfono:</b> ${telefono}</p>
+        <p><b>Teléfono:</b> ${telefono || "No proporcionado"}</p>
         <p><b>Servicio:</b> ${servicio}</p>
         <p><b>Mensaje:</b> ${mensaje}</p>
       `
@@ -80,11 +79,11 @@ app.post("/contacto", async (req, res) => {
     });
 
   } catch (error) {
-  console.error("❌ ERROR EN /contacto:", error.message);
-  res.status(500).json({
-    ok: false,
-    mensaje: "Error al enviar mensaje"
-  });
+    console.error("❌ ERROR EN /contacto:", error.message);
+    res.status(500).json({
+      ok: false,
+      mensaje: error.message
+    });
   }
 });
 
