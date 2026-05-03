@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Configuración de Correo (Usando tus variables de Render)
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com", 
+  host: "smtp.gmail.com", // Forzamos smtp correcto (sin errores de dedo)
   port: 587,
   secure: false, 
   auth: {
@@ -31,7 +31,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS
   },
   tls: {
-    rejectUnauthorized: false 
+    rejectUnauthorized: false // Esto evita que Google bloquee la conexión por ser desde Render
   }
 });
 
