@@ -12,14 +12,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname)); 
 
-// Conexión a MongoDB
+// ESTO ES CLAVE: Sirve los archivos de la carpeta actual
+app.use(express.static(path.join(__dirname))); 
+
+// 1. Conexión MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB conectado correctamente"))
   .catch((error) => console.error("❌ Error MongoDB:", error.message));
 
-// Configuración de Nodemailer
+// 2. Configuración de Correo
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -33,35 +35,29 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Ruta del formulario
+// 3. RUTA PRINCIPAL (Para arreglar el "Cannot GET /")
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// 4. Ruta Formulario (Sin await en sendMail para evitar Timeout)
 app.post("/contacto", async (req, res) => {
   try {
     const { nombre, correo, telefono, servicio, mensaje } = req.body;
+    const nuevo = new Contacto({ nombre, correo, telefono, servicio, mensaje });
+    await nuevo.save();
 
-    // Guardar en la base de datos
-    const nuevoContacto = new Contacto({
-      nombre,
-      correo,
-      telefono,
-      servicio,
-      mensaje
-    });
-
-    await nuevoContacto.save();
-
-    // Enviar correo (sin 'await' para responder rápido al cliente)
     transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
       subject: `Nuevo mensaje de ${nombre}`,
       text: `Nombre: ${nombre}\nCorreo: ${correo}\nTeléfono: ${telefono}\nServicio: ${servicio}\nMensaje: ${mensaje}`
-    }).catch(err => console.log("Error envío correo:", err));
+    }).catch(err => console.log("Error correo:", err.message));
 
-    res.json({ ok: true, mensaje: "¡Mensaje enviado!" });
-
+    res.json({ ok: true });
   } catch (error) {
-    console.error("❌ Error:", error);
-    res.status(500).json({ ok: false, mensaje: "Error en el servidor" });
+    console.error("Error servidor:", error.message);
+    res.status(500).json({ ok: false, mensaje: error.message });
   }
 });
 

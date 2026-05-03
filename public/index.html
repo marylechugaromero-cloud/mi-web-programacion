@@ -369,10 +369,8 @@ target="_blank">
 <script>
 document.getElementById("formulario").addEventListener("submit", async (e) => {
   e.preventDefault();
-
   const respuesta = document.getElementById("respuesta");
-  respuesta.style.color = "#ebe7e5";
-  respuesta.innerText = "⏳ Procesando... por favor espera.";
+  respuesta.innerText = "⏳ Enviando...";
 
   const data = {
     nombre: document.getElementById("nombre").value,
@@ -389,21 +387,14 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
       body: JSON.stringify(data)
     });
 
-    const json = await res.json();
-
-    if (json.ok) {
-      respuesta.style.color = "#22c55e"; // Verde éxito
-      respuesta.innerText = "✅ ¡Tu mensaje ha sido enviado y guardado!";
+    if (res.ok) {
+      respuesta.innerText = "✅ ¡Enviado con éxito!";
       document.getElementById("formulario").reset();
     } else {
-      respuesta.style.color = "#ff4444";
-      respuesta.innerText = "❌ Error: " + json.mensaje;
+      respuesta.innerText = "❌ Error en el servidor";
     }
-
   } catch (error) {
-    console.error(error);
-    respuesta.style.color = "#ff4444";
-    respuesta.innerText = "⚠️ El servidor tardó en responder, pero es posible que tu mensaje se haya enviado. Revisa tu correo.";
+    respuesta.innerText = "❌ Error de conexión";
   }
 });
 </script>
