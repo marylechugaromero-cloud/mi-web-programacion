@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB conectado"))
   .catch(err => console.log(err));
 
-// Configuración correo
+// 📧 CONFIG CORREO
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
